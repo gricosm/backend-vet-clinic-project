@@ -11,7 +11,7 @@ module.exports.createAppointment = async (req, res) => {
         let user = decrypTuser.decryptoken(req.headers.token)
         let verifyTime = timeFunction.difTime(req.body.date)
         if (verifyTime === false) {
-            res.send('Fecha inválida.')
+            res.send('Fecha no válida.')
         } else {
             let respond = await Appointment.create({
                 date: verifyTime,
@@ -22,7 +22,7 @@ module.exports.createAppointment = async (req, res) => {
         }
     } catch (error) {
         res.status(400).send({
-            message: 'No se ha podido generar una nueva cita.',
+            message: 'No se ha podido crear una nueva cita.',
             errors: error,
             status: 400
         });
@@ -33,8 +33,33 @@ module.exports.createAppointment = async (req, res) => {
 
 module.exports.searchAll = async (req, res) => {
     try {
-        let listAppointment = await Appointment.findAll({})
+        let listAppointment = await Appointment.findAll({
+            include: [
+                { model: pet },
+                { model: user }
+            ]
+        })
         res.status(200).json({ Data: listAppointment })
+    } catch (error) {
+        res.status(400).send({
+            message: 'No se han podido obtener las citas.',
+            status: 400
+        });
+    }
+}
+
+// Búsqueda de citas por estado pendiente.
+
+module.exports.searchAllPending = async (req, res) => {
+    try {
+        let result = await Appointment.findAll(
+            { 
+                where: { state: 'Pending' },
+                include: [
+                    { model: pet },
+                    { model: user }
+                ] })
+        res.status(200).json({ data: result });
     } catch (error) {
         res.status(400).send({
             message: 'No tienes citas pendientes.',
@@ -43,27 +68,14 @@ module.exports.searchAll = async (req, res) => {
     }
 }
 
-//Buscamos citas por estado 'pending'
+// Modificar la fecha de la cita.
 
-module.exports.searchAllPending = async (req, res) => {
-    try {
-        let result = await Appointment.findAll({ where: { state: 'Pending', } })
-        res.status(200).json({ data: result });
-    } catch (error) {
-        res.status(400).send({
-            message: 'No tienes citas pendientes',
-            status: 400
-        });
-    }
-}
-
-// // Modificación de la cita, por alguna otra fecha//mejorar
 module.exports.updateAppointment = async (req, res) => {
     try {
         await Appointment.update({ date: req.body.fechaModificar }, {
         where: { date: req.body.fechaActual }
         })
-        res.status(200).json({ data: 'La fecha se ha ejecutado con éxito a : ${req.body.fechaModificar}' });
+        res.status(200).json({ data: 'La fecha de su cita se ha modificado con éxito.' });
     } catch (error) {
         res.status(400).send({
             message: 'La cita no se ha podido modificar.',
@@ -72,7 +84,7 @@ module.exports.updateAppointment = async (req, res) => {
     }
 }
 
-//Eliminar cita por su ID
+// Eliminar cita por su ID.
 
 module.exports.deleteAppointment = async(req, res) => {
     try{
@@ -93,9 +105,9 @@ module.exports.deleteOne = async (req, res) => {
         await Appointment.destroy({
             where: {
                 userId: user.data,
-                date:dateDelete.AppointementDelete
+                date: dateDelete.AppointementDelete
             } })
-        res.status(200).json({ data: `La cita se ha eliminado con éxito a : ${req.body.AppointementDelete}` });
+        res.status(200).json({ data: 'La cita se ha eliminado con éxito' });
     } catch(error) {
         res.status(400).send({
             message: 'Ha habido un problema.',

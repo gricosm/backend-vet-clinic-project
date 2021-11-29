@@ -1,13 +1,10 @@
-
-// const { where } = require('sequelize/types')
 const { User, Appointment } = require('../models/index.js')
 const { Op, DATE } = require("sequelize")
-// const { Module } = require('module')
-// const { Json } = require('sequelize/types/lib/utils')
 const hashing = require('../Middleware/functions')
 const { Console } = require('console')
 
-//creamos usuario
+// Crear Usuario.
+
 module.exports.createUser = async (req, res) => {
     try {
         const newUser = req.body
@@ -16,26 +13,41 @@ module.exports.createUser = async (req, res) => {
         await User.create(newUser)
         res.status(200).json({ user: newUser });
     } catch (error) {
-        res.status(400).json({
-            message: 'No se ha podido generar un nuevo usuario.',
-        });
+        res.status(400).json({ message: 'No se ha podido generar un nuevo usuario.', });
     }
 }
-//crear admin
+
+// Crear Administrador.
+
 module.exports.createAdmin = async (req, res) => {
     try {
-        console.log(req.body)
         const newAdmin = req.body
         newAdmin.password = hashing.createHash(newAdmin.password)
         await Admin.create(newAdmin)
         res.status(200).json({ Admin: newAdmin });
     } catch (error) {
-        res.status(400).json({
-            message: 'No se ha podido generar un nuevo administrador.',
-        });
+        res.status(400).json({ message: 'No se ha podido generar un nuevo administrador.', });
     }
 }
-//buscamos Usuario
+
+// Login del Usuario.
+
+module.exports.login = async (req, res) => {
+    
+    try {
+        let hashDescoted = await hashing.compareHash(req.body)
+        res.status(200).json({ hashDescoted })
+    } catch (error) {
+        res.json({
+            message: 'El mail o la contraseña son incorrectos.',
+            errors: error,
+            status: 400
+        })
+    }
+}
+
+// Búsqueda de Usuario. 
+
 module.exports.searchUser = (req, res) => {
     try {
         User.findByPk(req.params.id)
@@ -51,9 +63,10 @@ module.exports.searchUser = (req, res) => {
         })
     }
 }
-// Buscamos todos los usarios
-module.exports.searchAll = async (req, res) => {
 
+// Búsqueda de todos los Usuarios. (Solo Administradores.)
+
+module.exports.searchAll = async (req, res) => {
     try {
         let users = await User.findAll({})
         res.status(200).json({ Data: users })
@@ -64,36 +77,17 @@ module.exports.searchAll = async (req, res) => {
         })
     }
 }
-//eliminarusario ID
+
+// Eliminar Usuario.
+
 module.exports.deleteUser = async (req, res) => {
     try {
-        console.log(req.query)
         let arr = req.query.id
-        console.log(arr)
-        await User.destroy({
-            where: {
-                id: arr
-            }
-        })
-        res.status(200).json({ Data: 'el usuario se ha eliminado con exito' })
+        await User.destroy({ where: { id: arr } })
+        res.status(200).json({ Data: 'El usuario se ha eliminado con éxito.' })
     } catch (error) {
         res.status(400).send({
-            message: 'El usuario no se ha podido eliminar',
-            status: 400
-        })
-    }
-}
-//login
-module.exports.loggin = async (req, res) => {
-    
-    try {
-        let hashDescoted = await hashing.compareHash(req.body)
-        console.log(hashDescoted)
-        res.status(200).json({ hashDescoted })
-    } catch (error) {
-        res.json({
-            message: 'mail or password denegado.',
-            errors: error,
+            message: 'No se ha podido eliminar el usuario.',
             status: 400
         })
     }
