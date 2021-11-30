@@ -1,4 +1,4 @@
-const { User, Appointment } = require('../models/index.js')
+const { User } = require('../models/index.js')
 const { Op, DATE } = require("sequelize")
 const hashing = require('../Middleware/functions')
 const { Console } = require('console')
@@ -48,10 +48,10 @@ module.exports.login = async (req, res) => {
 
 // Búsqueda de Usuario. 
 
-module.exports.searchUser = (req, res) => {
+module.exports.searchUser = async (req, res) => {
     try {
-        User.findByPk(req.params.id)
-            .then((user) => {
+        await User.findByPk(req.params.id)
+             ((user) => {
                 if (!user) res.status(200).send('El usuario no existe')
                 res.status(200).json({ data: user })
             })

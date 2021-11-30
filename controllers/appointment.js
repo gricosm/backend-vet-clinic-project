@@ -1,4 +1,4 @@
-const { User, Appointment, sequelize } = require('../models/index.js')
+const { Appointment, sequelize } = require('../models/index.js')
 const { Op } = require("sequelize")
 const decrypTuser = require('../Middleware/decryptoken')
 const moment = require("moment");
