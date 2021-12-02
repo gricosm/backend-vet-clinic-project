@@ -12,7 +12,7 @@ module.exports = {
       role: 'admin',
       createdAt: new Date(),
       updatedAt: new Date()
-    }], [{
+    }, {
       id: 2,
       name: 'Jose Luis',
       lastName: 'Contacto',
@@ -21,7 +21,7 @@ module.exports = {
       role: 'user',
       createdAt: new Date(),
       updatedAt: new Date()
-    }], {});
+    }],{});
   },
 
   down: (queryInterface, Sequelize) => {

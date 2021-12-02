@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   Appointment.init({
-    date: DataTypes.STRING,
+    date: DataTypes.DATE,
     state: DataTypes.STRING,
     doctor: DataTypes.STRING,
   }, 

@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "adminPassword",
-    "database": "appointment_api",
+    "database": "vet-clinic-project-6",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
