@@ -4,7 +4,7 @@ const middleware= require('../middleware/functions')
 const checkRole = require('../middleware/decryptoken')
 
 router.post('/',  controller.createPet)
-router.get('/all', middleware.verificarToken, checkRole.role ,controller.searchAll)
+router.get('/all', middleware.verificarToken, checkRole.role ,controller.searchAllPet)
 router.get('/:id', middleware.verificarToken, controller.searchPet)
 router.delete('/', middleware.verificarToken, checkRole.role, controller.deletePet)
 

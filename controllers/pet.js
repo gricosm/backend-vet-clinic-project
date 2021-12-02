@@ -1,6 +1,8 @@
 const { Pet } = require('../models/index.js');
 const pet = require('../models/pet');
 
+// Creación de registro de la mascota.
+
 module.exports.createPet = async (req, res) => {
     try{
         const newPet = req.body
@@ -11,6 +13,8 @@ module.exports.createPet = async (req, res) => {
     }
 }
 
+// Búsqueda por ID de la mascota.
+
 module.exports.searchPet = async (req, res) => {
     try {
         await Pet.findByPk(req.params.id)
@@ -20,6 +24,8 @@ module.exports.searchPet = async (req, res) => {
     }
 }
 
+// Búsqueda de todo el listado de mascotas. (Solo Admin.)
+
 module.exports.searchAllPet = async (req, res) => {
     try{
         let pets = await Pet.findAll({})
@@ -28,6 +34,8 @@ module.exports.searchAllPet = async (req, res) => {
         res.status(400).json({ message: 'No hemos podido encontrar el listado completo de mascotas.'})
     }
 }
+
+// Borrar registro de la mascota.
 
 module.exports.deletePet = async (req, res) => {
     try{

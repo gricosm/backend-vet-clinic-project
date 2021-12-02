@@ -1,4 +1,3 @@
-
 const router = require('express').Router();
 const controller = require('../controllers/appointment.js');
 const checkRole = require('../middleware/decryptoken')
@@ -13,4 +12,3 @@ router.delete('/deleteall', checkToken.verificarToken, controller.deleteAppointm
 router.get('/searchall',checkToken.verificarToken, controller.searchAllPending )
 
 module.exports = router;
-

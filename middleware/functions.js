@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
-const redis = require('redis').default;
+// const redis = require('redis').default;
 const JWTR = require('jwt-redis').default;
-const redisClient = redis.createClient();
+const redisClient = require('redis').createClient();
 const jwtr = new JWTR(redisClient);
 const moment = require("moment");
 const { User } = require('../models/index.js');

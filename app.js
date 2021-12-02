@@ -1,13 +1,12 @@
 const express = require('express');
-const {User, Appointment, Pet} = require('./models/index')
 const appointmentRouter = require('./routers/appointment');
 const userRouter = require('./routers/user');
 const petRouter = require('./routers/pet');
 const app = express();
-app.use(express.json()); //conversor a codigo JSON: MIDELWARE
+app.use(express.json()); // Conversor a codigo JSON: MIDDLEWARE
 const dotenv = require('dotenv').config()
 
-app.use('/', "holamundo")
+// app.use('/')
 app.use('/appointment', appointmentRouter)
 app.use('/user', userRouter)
 app.use('/pet', petRouter)
